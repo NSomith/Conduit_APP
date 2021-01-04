@@ -18,7 +18,7 @@ class FeedViewModel:ViewModel() {
     fun getGolobalFeed() = viewModelScope.launch {
         ArticlesRepo.gelGlobalFeed().body()?.let {
             _feed.postValue(it.articles)
-            Log.d("Feed","${it.articlesCount}")
+            Log.d("Singh","${it.articlesCount}")
         }
     }
 }
