@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.conduit.R
-import com.example.conduit.databinding.FragmentGalleryBinding
 import com.example.conduit.databinding.FragmentGlobalFeedBinding
 
 class GlobalFeedFragment : Fragment() {

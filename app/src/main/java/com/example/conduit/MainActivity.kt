@@ -1,7 +1,9 @@
 package com.example.conduit
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -13,16 +15,27 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
+import com.example.api.module.entities.User
+import com.example.conduit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var authViewModel: AuthViewModel?=null //making a common view model for the login activity
+    private lateinit var binding:ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+
+        authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+//        binding = ActivityMainBinding.inflate(LayoutInflater.from(this))
 
         val fab: FloatingActionButton = findViewById(R.id.fab)
         fab.setOnClickListener { view ->
@@ -36,12 +49,29 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(setOf(
                 R.id.nav_feed,
-                R.id.nav_home,
-                R.id.nav_gallery,
-                R.id.nav_slideshow
+                R.id.nav_feed
         ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        authViewModel?.user?.observe({lifecycle}) {
+            updateUser(it)
+            navController.navigateUp()
+            Toast.makeText(this,"username ${it?.email} is here", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateUser(user: User?){
+        when(user){
+            is User ->{
+                binding.navView.menu.clear()
+                binding.navView.inflateMenu(R.menu.activity_main__user)
+            }
+            else->{
+
+            }
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

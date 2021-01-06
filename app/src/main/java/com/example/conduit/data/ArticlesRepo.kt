@@ -4,7 +4,7 @@ import com.example.api.ConduitClient
 
 object ArticlesRepo {
 
-    val api = ConduitClient().api
+    val api = ConduitClient.publicapi
 
     suspend fun gelGlobalFeed() = api.getArticles()
 }
